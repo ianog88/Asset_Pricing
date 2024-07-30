@@ -1,1 +1,19 @@
-# Asset_Pricing
+# Autoencoder Asset Pricing Model
+This repository contains the code file to a model I am currently working on. I believe I have made several improvements to the current cutting edge asset pricing model. I have included a brief description of the current model followed by the various changes I have made.
+
+## Original Model 
+The Conditional Autoencoder model was created by Bryan Kelly and outlined in the paper “Autoencoder Asset Pricing Models”. It is a machine learning approach that uses an autoencoder as opposed to the traditional PCA approach to identify latent factors in stocks. The autoencoder is trained in unison with a separate network which is outputting the factor loadings which are dotted together to produce the various stock returns. The idea is to represent each stocks returns as a linear combination of the factors produced by the autoencoder and the factor loadings which are a function of the stocks characteristics. I believe this approach has several shortcomings which I have outlined below. 
+
+## Probabilistic Forecast 
+The first problem with this approach is it is using a point forecast as opposed to a probabilistic forecast. It is known that stock returns are a realisation of a random variable and hence you should be forecasting the distribution from which the return is drawn as oppose to attempting to forecast the precise return. In the paper they note the “more pronounced predictive power at the portfolio level vs the individual stock level” which is due to the portfolio of stock returns tending to the mean. If you acknowledge that stock returns are the product of a random process than attempting to forecast the exact return is equivalent to trying to forecast the exact outcome of a coin flip. Given that the factor loadings are modelled by this process suggests the model likely suffers from overfitting. 
+ 
+My remedy for this is to represent the factors as parameters of a distribution and hence the prediction will be a distribution. I have used the Johnson SU distribution as the additional parameters for skewness and tail weight give it to flexibility to accurately model the factors. I use the Fast Fourier Transform algorithm to efficiently compute the sum of the distributions. The factor loadings are then estimated using maximum likelihood. 
+
+## Autoencoder Training 
+In my approach I train the autoencoder separately to ensure the factors are independent. When I implemented the conditional autoencoder I found that there was correlation between factors which has negative implications when constructing a portfolio. Training the autoencoder separately also satisfies the requirement for distributions to be independent when summing them. 
+
+## Variables used  
+The original model uses a large amount of price, fundamental and economic variables when forecasting the factor loadings. When they analyse variable significance, they find that the price data included is by far the most important. However, the actual price data they included was relatively arbitrary (1 month return, 12 month return and 36 month return). In my model I exclusively used price data and just give the most recent price data available. 
+
+## Results
+My model has produced an out-of-sample Continuous Ranked Probability Score of 1.31 which appears to be a strong initial result especially considering the small amount of data included. I believe this is significantly better than the performance of the original autoencoder model which produced a predictive R squared value of 0.5% for individual stocks. In addition to the accuracy, the fact that the model forecasts the distribution of returns gives an investor significantly more information regarding the risk of a stock. The independent factors and more accurate factor loadings are also more favourable for constructing a portfolio with a high sharpe ratio. 
