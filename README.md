@@ -1,5 +1,5 @@
 # Autoencoder Asset Pricing Model
-This repository contains the code file [Asset_Pricing.ipynb] to a model I am currently working on. I believe I have made several improvements to the current cutting edge asset pricing model. I have included a brief description of the current model followed by the various changes I have made.
+This repository contains the code file [Asset_Pricing.ipynb](Asset_Pricing.ipynb) to a model I am currently working on. I believe I have made several improvements to the current cutting edge asset pricing model. I have included a brief description of the current model followed by the various changes I have made.
 
 ## Original Model 
 The Conditional Autoencoder model was created by Bryan Kelly and outlined in the paper “Autoencoder Asset Pricing Models”. It is a machine learning approach that uses an autoencoder as opposed to the traditional PCA approach to identify latent factors in stocks. The autoencoder is trained in unison with a separate network which is outputting the factor loadings which are dotted together to produce the various stock returns. The idea is to represent each stocks returns as a linear combination of the factors produced by the autoencoder and the factor loadings which are a function of the stocks characteristics. I believe this approach has several shortcomings which I have outlined below. 
